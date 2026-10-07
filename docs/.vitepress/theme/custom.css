@@ -1,0 +1,10 @@
+.vp-doc .mermaid p,
+.vp-doc .mermaid span {
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* 그래도 살짝 넘치면 잘리지 않게 */
+.vp-doc .mermaid foreignObject {
+  overflow: visible;
+}

@@ -1,6 +1,6 @@
-import { defineConfig } from "vitepress";
+import { withMermaid } from "vitepress-plugin-mermaid";
 
-export default defineConfig({
+export default withMermaid({
   lang: "ko-KR",
   title: "Wizard App 기획",
   description: "반려동물 앱 기획 문서",
@@ -10,6 +10,7 @@ export default defineConfig({
     nav: [
       { text: "홈", link: "/" },
       { text: "기획 문서", link: "/01-personas-and-scenarios" },
+      { text: "유저 플로우", link: "/08-user-flow" },
     ],
 
     sidebar: [
@@ -35,10 +36,23 @@ export default defineConfig({
           { text: "서비스 한 줄 정의", link: "/07-service-one-liner" },
         ],
       },
+      {
+        text: "설계",
+        items: [{ text: "유저 플로우", link: "/08-user-flow" }],
+      },
     ],
 
     search: { provider: "local" },
     outline: { level: [2, 3], label: "목차" },
     docFooter: { prev: "이전 문서", next: "다음 문서" },
+  },
+
+  mermaid: {
+    // 필요하면 Mermaid 옵션을 여기에 추가
+  },
+  vite: {
+    optimizeDeps: {
+      include: ["mermaid", "mermaid > dayjs"],
+    },
   },
 });

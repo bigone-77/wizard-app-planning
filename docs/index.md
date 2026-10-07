@@ -23,4 +23,7 @@ features:
   - title: v0 범위
     details: 첫 버전에 들어갈 기능
     link: /06-v0-features
+  - title: 유저 플로우
+    details: 첫 실행 · 홈 · 외부 진입 흐름
+    link: /08-user-flow
 ---
