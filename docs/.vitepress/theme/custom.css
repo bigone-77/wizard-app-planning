@@ -8,3 +8,40 @@
 .vp-doc .mermaid foreignObject {
   overflow: visible;
 }
+
+/* 클릭할 수 있다는 표시 */
+.vp-doc .mermaid {
+  cursor: zoom-in;
+}
+
+/* 전체 화면 오버레이 */
+.mermaid-zoom-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: var(--vp-c-bg);
+  cursor: grab;
+}
+
+.mermaid-zoom-overlay svg {
+  width: 100%;
+  height: 100%;
+  max-width: none !important;
+}
+
+.mermaid-zoom-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  padding: 8px 14px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 8px;
+  background: var(--vp-c-bg-soft);
+  color: var(--vp-c-text-1);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.mermaid-zoom-close:hover {
+  background: var(--vp-c-bg-mute);
+}

@@ -11,6 +11,9 @@ importers:
       mermaid:
         specifier: 12.1.0
         version: 12.1.0
+      svg-pan-zoom:
+        specifier: 3.6.2
+        version: 3.6.2
       vitepress:
         specifier: 2.0.0-alpha.20
         version: 2.0.0-alpha.20(postcss@8.5.29)
@@ -932,6 +935,9 @@ packages:
 
   stylis@4.4.0:
     resolution: {integrity: sha512-5Z9ZpRzfuH6l/UAvCPAPUo3665Nk2wLaZU3x+TLHKVzIz33+sbJqbtrYoC3KD4/uVOr2Zp+L0LySezP9OHV9yA==}
+
+  svg-pan-zoom@3.6.2:
+    resolution: {integrity: sha512-JwnvRWfVKw/Xzfe6jriFyfey/lWJLq4bUh2jwoR5ChWQuQoOH8FEh1l/bEp46iHHKHEJWIyFJETbazraxNWECg==}
 
   tabbable@6.5.0:
     resolution: {integrity: sha512-wieBHXygIm7OyQOu5hQlkk62/WyCFYGlWg7L6/ZCUZwx0o398Zkn4pVmMyfYhfMG8kGrj/Krt8eIk6UKC6VzwA==}
@@ -1977,6 +1983,8 @@ snapshots:
       character-entities-legacy: 3.0.0
 
   stylis@4.4.0: {}
+
+  svg-pan-zoom@3.6.2: {}
 
   tabbable@6.5.0: {}
 

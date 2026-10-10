@@ -11,6 +11,7 @@ export default withMermaid({
       { text: "홈", link: "/" },
       { text: "기획 문서", link: "/01-personas-and-scenarios" },
       { text: "유저 플로우", link: "/08-user-flow" },
+      { text: "DB 구조", link: "/10-db-schema" },
     ],
 
     sidebar: [
@@ -38,7 +39,11 @@ export default withMermaid({
       },
       {
         text: "설계",
-        items: [{ text: "유저 플로우", link: "/08-user-flow" }],
+        items: [
+          { text: "유저 플로우", link: "/08-user-flow" },
+          { text: "화면 목록", link: "/09-screen-list" },
+          { text: "DB 구조", link: "/10-db-schema" },
+        ],
       },
     ],
 
