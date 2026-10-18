@@ -10,8 +10,10 @@ export default withMermaid({
     nav: [
       { text: "홈", link: "/" },
       { text: "기획 문서", link: "/01-personas-and-scenarios" },
+      { text: "V0 기능", link: "/06-v0-features" },
       { text: "유저 플로우", link: "/08-user-flow" },
       { text: "DB 구조", link: "/10-db-schema" },
+      { text: "박사 설계", link: "/12-doctor-design" },
     ],
 
     sidebar: [
@@ -33,7 +35,7 @@ export default withMermaid({
       {
         text: "정리",
         items: [
-          { text: "v0 기능 목록", link: "/06-v0-features" },
+          { text: "V0 기능 목록", link: "/06-v0-features" },
           { text: "서비스 한 줄 정의", link: "/07-service-one-liner" },
         ],
       },
@@ -43,6 +45,18 @@ export default withMermaid({
           { text: "유저 플로우", link: "/08-user-flow" },
           { text: "화면 목록", link: "/09-screen-list" },
           { text: "DB 구조", link: "/10-db-schema" },
+        ],
+      },
+      {
+        text: "리서치",
+        items: [{ text: "벤치마킹", link: "/11-benchmark" }],
+      },
+      {
+        text: "박사",
+        items: [
+          { text: "박사 설계", link: "/12-doctor-design" },
+          { text: "박사 정답지", link: "/13-doctor-answer-key" },
+          { text: "지식 계획", link: "/14-knowledge-plan" },
         ],
       },
     ],
