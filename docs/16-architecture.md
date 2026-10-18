@@ -3,6 +3,7 @@
 > 상태: 확정 — V0(알파) 기준. 본 개발은 이 문서를 따른다
 > 근거 문서: 06 V0 기능, 08 User Flow, 09 화면 목록, 10 DB 구조, 12 박사 설계, 15 개발 계획
 > **이 문서와 다른 문서가 충돌하면**: 데이터 구조는 10, 박사 동작은 12, 기능 범위는 06이 우선한다
+> **저장소는 두 개**(`wizard-app`, `wizard-backend`). 두 저장소가 주고받는 데이터 형식은 **16장 형식 약속**이 기준이다
 
 ---
 
@@ -123,9 +124,20 @@ flowchart TB
 
 ---
 
-## 4. 앱 구조
+## 4. 저장소와 앱 구조
 
-### 폴더
+### 저장소
+
+| 저장소           | 내용                                                | 배포                                            |
+| ---------------- | --------------------------------------------------- | ----------------------------------------------- |
+| `wizard-app`     | Expo 앱 (화면, 기능, 사전 설계 흐름, 가이드 콘텐츠) | EAS Build → TestFlight · Play 내부 테스트       |
+| `wizard-backend` | Supabase (마이그레이션, 서버 함수, 설정)            | `supabase db push`, `supabase functions deploy` |
+
+- **공유하는 코드는 없다.** 공유하는 것은 **형식 약속**(16장)과 **DB 타입**(각 저장소에서 자동 생성)뿐
+- 서버 함수는 Deno 환경이라 앱 코드를 직접 가져다 쓰지 않는다. 작은 공통 로직(상대 시간 계산 등)은 양쪽에 각각 둔다
+- Docker 설정 파일은 두지 않는다. 로컬 Supabase는 `wizard-backend`에서 `npx supabase start`로 실행 (Docker Desktop만 필요)
+
+### `wizard-app` 폴더
 
 ```text
 app/                          # Expo Router 화면
@@ -150,7 +162,7 @@ app/                          # Expo Router 화면
 
 src/
   lib/
-    supabase.ts               # 클라이언트 (env로 로컬/개발/알파 전환)
+    supabase.ts               # 클라이언트 (env로 local/dev/alpha 전환)
     query-client.ts
     ids.ts                    # uuidv7()
     time.ts                   # 시간대, 상대 시간 ("2일 전")
@@ -166,27 +178,39 @@ src/
     notifications/            # 토큰 등록, 권한, 알림 진입 처리
     hospital/                 # 진료 요약, PDF, 지도 바로가기
     home/                     # 홈 상태 계산 (적응기 / 평소 / 입양 준비)
-  schemas/                    # zod: 기록 data, 메시지 payload, 흐름 JSON
-  types/database.ts           # Supabase 생성 타입
+  contracts/                  # 16장 형식 약속의 zod 스키마 (앱 쪽 사본)
+  types/database.ts           # DB 타입 (자동 생성)
 content/
-  flows/                      # 사전 설계 흐름 JSON
-    emergency-check.json      # 1B 긴급 점검
-    feeding-refusal.json      # 거식
-    red-flags.json            # 위험 신호
+  flows/                      # 사전 설계 흐름 JSON (흐름 ID는 16장)
+    emergency-check.json
+    feeding-refusal.json
+    red-flags.json
   guides/                     # 입양 전 가이드, 읽을거리 (md)
+```
 
+### `wizard-backend` 폴더
+
+```text
 supabase/
   config.toml
   migrations/                 # SQL (10 기준)
+  seed.sql                    # 로컬 테스트 데이터
+  tests/                      # RLS·트리거·제약 테스트
   functions/
-    _shared/                  # 공통: 인증 확인, 예산, 상황 블록, 에러
+    _shared/
+      auth.ts                 # 사용자 JWT 확인
+      budget.ts               # consume_ai_budget 호출
+      context.ts              # 상황 블록 생성 (12)
+      red-flags.ts            # 위험 신호 규칙
+      contracts.ts            # 16장 형식 약속의 zod 스키마 (백엔드 쪽 사본)
+      time.ts                 # 상대 시간 계산
+      errors.ts               # 공통 에러 형식
     doctor-chat/
     evaluate-record/
     voice-record/
     send-notifications/
     daily-cleanup/
     delete-account/
-  seed.sql                    # 로컬 테스트 데이터
 ```
 
 ### 화면과 경로
@@ -282,6 +306,7 @@ const result = await callFunction("evaluate-record", { record_ids: [id] }); // �
 - 개체 수 상한: `app_config.max_pets_per_user` (V0 = 1)를 넘으면 `pets` insert 거부
 - 박사 사용량: 횟수가 아니라 **비용 단위** (`ai_usage_daily.used_units`, `profiles.ai_daily_budget_override`)
 - 예산 차감 함수: `consume_ai_budget(user_id, units)` → `{ allowed, used, budget }` (service_role 전용)
+- 기록 `data` 검증 함수가 16.3 형식을 따름 (먹이 `dusting`, 배변 `abnormal` 값 포함)
 
 ---
 
@@ -526,13 +551,13 @@ const result = await callFunction("evaluate-record", { record_ids: [id] }); // �
 
 ## 13. 테스트
 
-| 층       | 대상                                                                     | 도구                                | LLM  |
-| -------- | ------------------------------------------------------------------------ | ----------------------------------- | ---- |
-| 단위     | 흐름 실행기, 상황 블록 생성, 출력 검증, 규칙 판정, 시간 계산, zod 스키마 | Vitest (순수 TS 로직)               | 목업 |
-| 컴포넌트 | 메시지 렌더링, 하단 칩, 확인 카드                                        | Jest + React Native Testing Library | 목업 |
-| DB       | RLS, 트리거, 제약 (10 예외 상황)                                         | SQL 테스트 (로컬 Supabase)          | —    |
-| 평가     | 박사 답변 (13 정답지)                                                    | Vitest + 실제 호출                  | 실제 |
-| E2E      | 로그인 → 등록 → 기록 → 박사 → 병원 권고                                  | Maestro                             | 목업 |
+| 층       | 대상                                                                     | 도구                                         | LLM  |
+| -------- | ------------------------------------------------------------------------ | -------------------------------------------- | ---- |
+| 단위     | 흐름 실행기, 상황 블록 생성, 출력 검증, 규칙 판정, 시간 계산, zod 스키마 | Vitest (순수 TS 로직)                        | 목업 |
+| 컴포넌트 | 메시지 렌더링, 하단 칩, 확인 카드                                        | Jest + React Native Testing Library          | 목업 |
+| DB       | RLS, 트리거, 제약 (10 예외 상황)                                         | SQL 테스트 (`wizard-backend`, 로컬 Supabase) | —    |
+| 평가     | 박사 답변 (13 정답지)                                                    | Vitest + 실제 호출                           | 실제 |
+| E2E      | 로그인 → 등록 → 기록 → 박사 → 병원 권고                                  | Maestro                                      | 목업 |
 
 - 박사 평가 통과 기준: 위험 시나리오 100%, 형식 오류·금지 표현 0건, 품질 평균 4.0 이상 (12)
 - React Native 컴포넌트 테스트는 Jest 생태계가 표준이라, Vitest는 화면과 무관한 순수 로직에 사용
@@ -541,14 +566,14 @@ const result = await callFunction("evaluate-record", { record_ids: [id] }); // �
 
 ## 14. 배포
 
-| 단계         | 방법                                                                                             |
-| ------------ | ------------------------------------------------------------------------------------------------ |
-| 앱 빌드      | EAS Build 프로필: `development` (개발 빌드), `preview`, `production`                             |
-| iOS 배포     | TestFlight                                                                                       |
-| Android 배포 | Play Console 내부 테스트                                                                         |
-| DB 변경      | 새 마이그레이션 파일 → local 검증 → `db push` (dev → alpha). 적용된 마이그레이션은 수정하지 않음 |
-| 서버 함수    | `supabase functions deploy` (dev → alpha)                                                        |
-| 스케줄러     | 서버 함수 배포 후 마이그레이션으로 `pg_cron` 등록                                                |
+| 단계                         | 방법                                                                                             |
+| ---------------------------- | ------------------------------------------------------------------------------------------------ |
+| 앱 빌드 (`wizard-app`)       | EAS Build 프로필: `development` (개발 빌드), `preview`, `production`                             |
+| iOS 배포                     | TestFlight                                                                                       |
+| Android 배포                 | Play Console 내부 테스트                                                                         |
+| DB 변경 (`wizard-backend`)   | 새 마이그레이션 파일 → local 검증 → `db push` (dev → alpha). 적용된 마이그레이션은 수정하지 않음 |
+| 서버 함수 (`wizard-backend`) | `supabase functions deploy` (dev → alpha)                                                        |
+| 스케줄러                     | 서버 함수 배포 후 마이그레이션으로 `pg_cron` 등록                                                |
 
 ---
 
@@ -561,3 +586,130 @@ const result = await callFunction("evaluate-record", { record_ids: [id] }); // �
 | LLM 서비스·모델       | M4        | 13 정답지 평가 점수, 비용, 응답 속도 |
 | `ai_daily_budget` 값  | M7        | 알파 비용 측정                       |
 | 기록 시점 검사 기준값 | M3        | 14 지식 자료                         |
+
+---
+
+## 16. 형식 약속 (두 저장소가 공유)
+
+두 저장소가 주고받는 데이터의 **유일한 기준**. 양쪽의 zod 스키마(`src/contracts/`, `_shared/contracts.ts`)는 이 장을 따른다.
+
+### 16.1 바꾸는 순서
+
+1. 이 문서(16장) 수정
+2. `wizard-backend`: 마이그레이션·검증 함수·서버 함수가 **새 형식을 받아들이도록** 먼저 변경 (이전 형식도 당분간 허용)
+3. `wizard-app`: DB 타입 재생성, zod 스키마·화면 수정
+4. 이전 형식을 더 이상 쓰지 않으면 백엔드에서 제거
+
+### 16.2 DB 타입
+
+- 각 저장소에서 `npx supabase gen types typescript`로 생성
+- `wizard-app`은 마이그레이션이 바뀔 때마다 재생성 (`db:types` 스크립트)
+
+### 16.3 사육 기록 `care_records.data`
+
+| `type`        | 필드                         | 값                                                       |
+| ------------- | ---------------------------- | -------------------------------------------------------- |
+| `feeding`     | `result` (필수)              | `eaten` · `refused` · `partial` · `unknown`              |
+|               | `feeder_type`                | `cricket` · `mealworm` · `dubia` · `superworm` · `other` |
+|               | `quantity`                   | 숫자 0~100                                               |
+|               | `dusting`                    | `calcium` · `calcium_d3` · `multivitamin` · `none`       |
+| `defecation`  | `status` (필수)              | `normal` · `soft` · `watery` · `unknown`                 |
+|               | `abnormal`                   | 배열: `blood` · `mucus` · `undigested`                   |
+| `weight`      | `weight_g` (필수)            | 숫자, 0 초과 20000 이하 (1자리 소수)                     |
+| `shed`        | `status` (필수)              | `complete` · `in_progress` · `stuck`                     |
+| `observation` | `key` (필수), `value` (필수) | 아래 관찰 키 목록                                        |
+
+**공통 컬럼**: `source` = `user` · `stt` · `adoption_info` · `question_flow` · `mission`, `is_uncertain`, `raw_text`(STT 원문), `conversation_id`
+
+**관찰 키** (사전 설계 흐름에서 생성)
+
+| `key`             | `value`                                 |
+| ----------------- | --------------------------------------- |
+| `body_condition`  | `ok` · `unsure` · `abnormal`            |
+| `floor_temp`      | `warm` · `unsure` · `cool`              |
+| `hide`            | `yes` · `no`                            |
+| `humid_hide`      | `yes` · `no` · `unsure`                 |
+| `lid_secure`      | `yes` · `no`                            |
+| `handling_recent` | `often` · `sometimes` · `rarely`        |
+| `toe_color`       | `normal` · `unsure` · `dark_or_swollen` |
+| `stool_abnormal`  | `none` · `unsure` · `present`           |
+
+> 키를 추가할 때는 16.1 순서를 따른다
+
+### 16.4 박사 메시지 `ai_messages`
+
+| `role`   | `type`        | `payload`                                                                            |
+| -------- | ------------- | ------------------------------------------------------------------------------------ |
+| `doctor` | `text`        | `{ "text": string }`                                                                 |
+| `doctor` | `choice`      | `{ "text": string, "options": [{ "id": string, "label": string }] }`                 |
+| `doctor` | `hospital`    | `{ "text": string, "summary": VetSummary }`                                          |
+| `doctor` | `mission`     | `{ "text": string, "mission_id": uuid }`                                             |
+| `doctor` | `log_confirm` | `{ "record_ids": uuid[] }`                                                           |
+| `user`   | `text`        | `{ "text": string }` (선택지 답변이면 `"answer_to": uuid, "option_id": string` 추가) |
+
+- `source_ids`: 참고 자료 ID 배열 (`knowledge_chunks.id`)
+- `flow_node_id`: 사전 설계 흐름에서 온 박사 메시지만 (`{flow_id}:{node_id}`, 예: `feeding-refusal:q1_condition`)
+- 하단 칩 표시 조건: 마지막 메시지가 `choice`이고, 그 메시지를 `answer_to`로 가리키는 사용자 메시지가 없을 때
+
+**`VetSummary`** (진료용 기록 요약, PDF의 원본)
+
+```json
+{
+  "pet": {
+    "name": "콩이",
+    "species": "펫테일 게코",
+    "size_stage": "subadult",
+    "sex": "unknown",
+    "adopted_at": "2026-10-08"
+  },
+  "concern": "입 주변 부음",
+  "started_at": "2026-11-08",
+  "recent_feeding": { "total": 3, "eaten": 1, "refused": 2 },
+  "recent_defecation": [
+    { "occurred_at": "...", "status": "soft", "abnormal": [] }
+  ],
+  "weights": [{ "occurred_at": "...", "weight_g": 20.1 }],
+  "recent_shed": { "occurred_at": "...", "status": "complete" },
+  "observations": [
+    { "key": "floor_temp", "value": "warm", "uncertain": false }
+  ],
+  "recent_changes": ["새 먹이 시작"],
+  "photo_ids": ["..."],
+  "vet_questions": []
+}
+```
+
+### 16.5 사전 설계 흐름 ID
+
+| `flow_id`         | 용도                       | 시작 위치                                               |
+| ----------------- | -------------------------- | ------------------------------------------------------- |
+| `emergency-check` | 1B 긴급 환경 점검          | S02 "막 데려왔어"                                       |
+| `feeding-refusal` | 거식 상담                  | 박사 대화, 기록 시점 검사                               |
+| `red-flags`       | 위험 신호 확인 → 병원 권고 | `RED_FLAG` 노드, `doctor-chat`·`evaluate-record`가 반환 |
+| `stool-check`     | 배변 이상 확인             | 기록 시점 검사 2단계                                    |
+| `toe-check`       | 탈피 후 발가락 확인        | 탈피 `stuck` 기록                                       |
+
+- `RED_FLAG`: 예약 노드. 어떤 흐름에서든 `red-flags`로 이동
+- 서버가 흐름을 지시할 때 형식: `{ "type": "flow", "flow_id": string }`
+
+### 16.6 서버 함수 입출력
+
+7장의 입력·출력이 약속이다. 요약:
+
+| 함수              | 입력                                   | 출력                                                                                                          |
+| ----------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `doctor-chat`     | `{ conversation_id, pet_id, message }` | SSE 텍스트 조각 → 완성 메시지 (16.4 형식) 또는 `{ type: "flow", flow_id }`                                    |
+| `evaluate-record` | `{ record_ids }`                       | `{ level, doctor_reply, prompt?, resolved_follow_up_id?, completed_mission_item_ids? }`                       |
+| `voice-record`    | 오디오 + `{ pet_id, recorded_at }`     | `{ raw_text, drafts: [{ id, type, occurred_at, data, is_uncertain }] }` (`data`는 16.3)                       |
+| `delete-account`  | 없음                                   | `{ ok: true }`                                                                                                |
+| 공통 에러         |                                        | `{ error: { code, message } }`, `code` = `BUDGET_EXCEEDED` · `NOT_FOUND` · `INVALID_INPUT` · `UPSTREAM_ERROR` |
+
+### 16.7 푸시 페이로드 `data`
+
+| `kind`                      | 필드                              | `route`                                           |
+| --------------------------- | --------------------------------- | ------------------------------------------------- |
+| `follow_up`                 | `follow_up_id`, `conversation_id` | `/(tabs)/doctor?conversationId={conversation_id}` |
+| `mission`                   | `mission_item_id`                 | `/(tabs)`                                         |
+| `inactivity_nudge` (Should) | `pet_id`                          | `/record/new`                                     |
+
+- 앱은 `route`로 이동하기 전에 4.3 이동 규칙을 먼저 통과시킨다
