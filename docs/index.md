@@ -12,6 +12,9 @@ hero:
     - theme: alt
       text: V0 기능 보기
       link: /06-v0-features
+    - theme: alt
+      text: 아키텍처 보기
+      link: /16-architecture
 
 features:
   - title: 누구를 위한 앱인가
@@ -41,4 +44,10 @@ features:
   - title: 지식 계획
     details: 자료 신뢰 순서 · 핵심 주제 25개 · 작성 규칙 (14)
     link: /14-knowledge-plan
+  - title: 개발 계획
+    details: 마일스톤 7개 · 완료 기준 · 개발 환경 (15)
+    link: /15-dev-plan
+  - title: 시스템 아키텍처
+    details: 앱 · Supabase · 서버 함수 · 데이터 접근 · 배포 (16)
+    link: /16-architecture
 ---

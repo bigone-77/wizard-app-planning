@@ -11,9 +11,10 @@ export default withMermaid({
       { text: "홈", link: "/" },
       { text: "기획 문서", link: "/01-personas-and-scenarios" },
       { text: "V0 기능", link: "/06-v0-features" },
-      { text: "유저 플로우", link: "/08-user-flow" },
       { text: "DB 구조", link: "/10-db-schema" },
       { text: "박사 설계", link: "/12-doctor-design" },
+      { text: "개발 계획", link: "/15-dev-plan" },
+      { text: "아키텍처", link: "/16-architecture" },
     ],
 
     sidebar: [
@@ -57,6 +58,13 @@ export default withMermaid({
           { text: "박사 설계", link: "/12-doctor-design" },
           { text: "박사 정답지", link: "/13-doctor-answer-key" },
           { text: "지식 계획", link: "/14-knowledge-plan" },
+        ],
+      },
+      {
+        text: "개발",
+        items: [
+          { text: "개발 계획", link: "/15-dev-plan" },
+          { text: "시스템 아키텍처", link: "/16-architecture" },
         ],
       },
     ],
