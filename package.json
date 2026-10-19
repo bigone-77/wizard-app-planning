@@ -8,6 +8,8 @@
   "scripts": {
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs"
+    "docs:preview": "vitepress preview docs",
+    "issues:preview": "bash scripts/create-github-issues.sh --dry-run",
+    "issues:create": "bash scripts/create-github-issues.sh"
   }
 }
