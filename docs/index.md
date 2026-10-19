@@ -50,4 +50,7 @@ features:
   - title: 시스템 아키텍처
     details: 앱 · Supabase · 서버 함수 · 데이터 접근 · 배포 (16)
     link: /16-architecture
+  - title: 주차별 할 일
+    details: 14주 · 할 일 67개 · 주 18시간 (17)
+    link: /17-weekly-todo
 ---

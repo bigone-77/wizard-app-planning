@@ -15,6 +15,7 @@ export default withMermaid({
       { text: "박사 설계", link: "/12-doctor-design" },
       { text: "개발 계획", link: "/15-dev-plan" },
       { text: "아키텍처", link: "/16-architecture" },
+      { text: "주차별 할 일", link: "/17-weekly-todo" },
     ],
 
     sidebar: [
@@ -65,6 +66,7 @@ export default withMermaid({
         items: [
           { text: "개발 계획", link: "/15-dev-plan" },
           { text: "시스템 아키텍처", link: "/16-architecture" },
+          { text: "주차별 할 일", link: "/17-weekly-todo" },
         ],
       },
     ],
