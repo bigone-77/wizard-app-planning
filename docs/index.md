@@ -53,4 +53,7 @@ features:
   - title: 주차별 할 일
     details: 14주 · 할 일 67개 · 주 18시간 (17)
     link: /17-weekly-todo
+  - title: 즉시 병원 신호
+    details: 즉시 병원 · 1~2일 내 상담 · 기록하며 관찰 3단계 (18)
+    link: /18-red-flags
 ---

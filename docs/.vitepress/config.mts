@@ -59,6 +59,7 @@ export default withMermaid({
           { text: "박사 설계", link: "/12-doctor-design" },
           { text: "박사 정답지", link: "/13-doctor-answer-key" },
           { text: "지식 계획", link: "/14-knowledge-plan" },
+          { text: "즉시 병원 신호", link: "/18-red-flags" },
         ],
       },
       {
