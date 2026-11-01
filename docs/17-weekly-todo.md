@@ -39,25 +39,25 @@
 
 | ID   | 주  | 마일스톤 | 저장소   | 유형     | 할 일                                                                                                     | 브랜치                    | 시간 |
 | ---- | --- | -------- | -------- | -------- | --------------------------------------------------------------------------------------------------------- | ------------------------- | ---- |
-| T001 | W01 | M1       | planning | Settings | Apple 개발자 계정 신청, Expo 계정 생성                                                                    | -                         | 1    |
-| T002 | W01 | M1       | planning | Settings | 개발 환경 설치: Docker Desktop, Xcode·iOS 시뮬레이터, Android Studio·Google Play 에뮬레이터               | -                         | 2    |
 | T003 | W01 | M1       | backend  | Settings | Supabase init, 초기 마이그레이션 로컬 적용 확인                                                           | feature/m1-supabase-setup | 2    |
 | T004 | W01 | M1       | backend  | Feat     | V0 반영 마이그레이션: 익명 로그인 정리, 개체 1마리 상한, 비용 단위 예산, 기록 data 검증(dusting·abnormal) | feature/m1-v0-migration   | 6    |
-| T005 | W01 | M1       | backend  | Test     | RLS·트리거·제약 SQL 테스트 기본 세팅 (10 예외 상황 일부)                                                  | feature/m1-db-tests       | 3    |
+| T005 | W01 | M1       | backend  | Test     | SQL 테스트 공통 도우미, RLS·사용자 격리·로그아웃 접근 테스트 (10 예외 상황: 사용자 영역)                  | feature/m1-db-tests       | 3    |
 | T006 | W01 | M1       | backend  | Settings | dev 프로젝트 생성, link, db push                                                                          | -                         | 1    |
 | T007 | W01 | M1       | planning | Content  | 즉시 병원 신호 목록 초안 (14 최우선)                                                                      | -                         | 3    |
 
 ## W02 · M1 앱 기반
 
-| ID   | 주  | 마일스톤 | 저장소   | 유형     | 할 일                                                                  | 브랜치                   | 시간 |
-| ---- | --- | -------- | -------- | -------- | ---------------------------------------------------------------------- | ------------------------ | ---- |
-| T008 | W02 | M1       | app      | Settings | Expo 프로젝트 생성, 개발 빌드로 iOS·안드로이드 실행                    | feature/m1-project-setup | 4    |
-| T009 | W02 | M1       | app      | Settings | 16장 폴더 뼈대, 하단 탭 4개 빈 화면                                    | feature/m1-project-setup | 2    |
-| T010 | W02 | M1       | app      | Decision | 스타일 라이브러리 결정, 디자인 토큰 초안 (간격·글자 크기·색 이름)      | feature/m1-design-tokens | 3    |
-| T011 | W02 | M1       | app      | Settings | 환경 변수(local·dev), Supabase 클라이언트, TanStack Query, UUIDv7 유틸 | feature/m1-auth          | 3    |
-| T012 | W02 | M1       | app      | Feat     | 이메일 로그인(개발 빌드 전용), 세션 유지, 이동 규칙 1단계 (S01)        | feature/m1-auth          | 4    |
-| T013 | W02 | M1       | app      | Settings | db:types 스크립트, DB 타입 생성                                        | feature/m1-auth          | 1    |
-| T014 | W02 | M1       | planning | Content  | 즉시 병원 신호 목록 검토·보완                                          | -                        | 1    |
+| ID   | 주  | 마일스톤 | 저장소   | 유형     | 할 일                                                                                                                  | 브랜치                     | 시간 |
+| ---- | --- | -------- | -------- | -------- | ---------------------------------------------------------------------------------------------------------------------- | -------------------------- | ---- |
+| T002 | W02 | M1       | planning | Settings | 개발 환경 설치: Docker Desktop, Xcode·iOS 시뮬레이터, Android Studio·Google Play 에뮬레이터 (macOS 26.6 업데이트 먼저) | -                          | 2    |
+| T008 | W02 | M1       | app      | Settings | Expo 프로젝트 생성, 개발 빌드로 iOS·안드로이드 실행                                                                    | feature/m1-project-setup   | 4    |
+| T009 | W02 | M1       | app      | Settings | 16장 폴더 뼈대, 하단 탭 4개 빈 화면                                                                                    | feature/m1-project-setup   | 2    |
+| T010 | W02 | M1       | app      | Decision | 스타일 라이브러리 결정, 디자인 토큰 초안 (간격·글자 크기·색 이름)                                                      | feature/m1-design-tokens   | 3    |
+| T011 | W02 | M1       | app      | Settings | 환경 변수(local·dev), Supabase 클라이언트, TanStack Query, UUIDv7 유틸                                                 | feature/m1-auth            | 3    |
+| T012 | W02 | M1       | app      | Feat     | 이메일 로그인(개발 빌드 전용), 세션 유지, 이동 규칙 1단계 (S01)                                                        | feature/m1-auth            | 4    |
+| T013 | W02 | M1       | app      | Settings | db:types 스크립트, DB 타입 생성                                                                                        | feature/m1-auth            | 1    |
+| T014 | W02 | M1       | planning | Content  | 즉시 병원 신호 목록 검토·보완                                                                                          | -                          | 1    |
+| T071 | W02 | M1       | backend  | Settings | CLAUDE.md에 문체·PR 형식 추가, .claude/ 줄표 제거, deny 규칙                                                           | feature/m1-claude-settings | 1    |
 
 ## W03 · M2 첫 흐름 (1)
 
@@ -71,15 +71,18 @@
 
 ## W04 · M2 첫 흐름 (2) + 속도 점검
 
-| ID   | 주  | 마일스톤 | 저장소   | 유형 | 할 일                                           | 브랜치                  | 시간 |
-| ---- | --- | -------- | -------- | ---- | ----------------------------------------------- | ----------------------- | ---- |
-| T020 | W04 | M2       | app      | Feat | 분양 정보를 입양 전 기록으로 저장               | feature/m2-pet-register | 2    |
-| T021 | W04 | M2       | app      | Feat | 기본 홈(S06): 개체 이름, 최근 기록 자리         | feature/m2-home-basic   | 4    |
-| T022 | W04 | M2       | app      | Feat | 앱 실행 이동 규칙 전체 (08)                     | feature/m2-routing      | 3    |
-| T023 | W04 | M2       | app      | Feat | 개체 정보(S11) 보기·수정                        | feature/m2-pet-info     | 3    |
-| T024 | W04 | M2       | backend  | Test | 개체 등록·1마리 상한·날짜 검증 SQL 테스트       | feature/m2-pet-tests    | 2    |
-| T025 | W04 | M2       | app      | Feat | 소셜 로그인(애플·구글), dev 프로젝트에서 테스트 | feature/m2-social-login | 3    |
-| T026 | W04 | M2       | planning | Docs | 속도 점검: M1~M2 실제 시간 기록, 이후 주차 조정 | -                       | 1    |
+| ID   | 주  | 마일스톤 | 저장소   | 유형     | 할 일                                                                                                              | 브랜치                   | 시간 |
+| ---- | --- | -------- | -------- | -------- | ------------------------------------------------------------------------------------------------------------------ | ------------------------ | ---- |
+| T020 | W04 | M2       | app      | Feat     | 분양 정보를 입양 전 기록으로 저장                                                                                  | feature/m2-pet-register  | 2    |
+| T021 | W04 | M2       | app      | Feat     | 기본 홈(S06): 개체 이름, 최근 기록 자리                                                                            | feature/m2-home-basic    | 4    |
+| T022 | W04 | M2       | app      | Feat     | 앱 실행 이동 규칙 전체 (08)                                                                                        | feature/m2-routing       | 3    |
+| T023 | W04 | M2       | app      | Feat     | 개체 정보(S11) 보기·수정                                                                                           | feature/m2-pet-info      | 3    |
+| T024 | W04 | M2       | backend  | Test     | 개체 날짜 검증 SQL 테스트 (나이 정보 없음, 출생일 > 분양일, 미래 날짜, 빈 이름)                                    | feature/m2-pet-tests     | 1    |
+| T068 | W04 | M2       | backend  | Test     | 기록 영역 SQL 테스트 (10 예외 상황: 재시도 중복, 여러 기록 일괄 저장, 보관 개체 기록, 기록 이동, 분양일 이전 기록) | feature/m2-record-tests  | 3    |
+| T069 | W04 | M2       | backend  | Feat     | 개체 상한 트리거: 본인 개체가 아니면 검사하지 않고 RLS에 맡김 (남의 개체 유무 노출 방지)                           | feature/m2-pet-limit-fix | 1    |
+| T070 | W04 | M2       | backend  | Settings | 테이블 권한(grant)을 마이그레이션에 명시 (Automatically expose new tables 설정 의존 제거)                          | feature/m2-table-grants  | 2    |
+| T025 | W04 | M2       | app      | Feat     | 소셜 로그인(애플·구글), dev 프로젝트에서 테스트                                                                    | feature/m2-social-login  | 3    |
+| T026 | W04 | M2       | planning | Docs     | 속도 점검: M1~M2 실제 시간 기록, 이후 주차 조정                                                                    | -                        | 1    |
 
 ## W05 · M3 텍스트 기록
 
@@ -92,12 +95,12 @@
 
 ## W06 · M3 기록 시점 검사
 
-| ID   | 주  | 마일스톤 | 저장소   | 유형     | 할 일                                               | 브랜치                     | 시간 |
-| ---- | --- | -------- | -------- | -------- | --------------------------------------------------- | -------------------------- | ---- |
-| T031 | W06 | M3       | planning | Content  | 기록 시점 검사 기준값 확정 (14 확정 필요 수치)      | -                          | 3    |
-| T032 | W06 | M3       | backend  | Feat     | evaluate-record V0 규칙 완성(04)과 단위 테스트      | feature/m3-evaluate-record | 6    |
-| T033 | W06 | M3       | app      | Feat     | 저장 → 검사 연결, 박사 한두 줄 반응, 같은 ID 재시도 | feature/m3-evaluate-record | 5    |
-| T034 | W06 | M3       | app      | Decision | STT 서비스 결정 (한국어 정확도, 비용)               | -                          | 4    |
+| ID   | 주  | 마일스톤 | 저장소   | 유형     | 할 일                                                                            | 브랜치                     | 시간 |
+| ---- | --- | -------- | -------- | -------- | -------------------------------------------------------------------------------- | -------------------------- | ---- |
+| T031 | W06 | M3       | planning | Content  | 기록 시점 검사 기준값 확정 (14 확정 필요 수치, 04·18 배변 이상 소견 단계 맞추기) | -                          | 3    |
+| T032 | W06 | M3       | backend  | Feat     | evaluate-record V0 규칙 완성(04)과 단위 테스트                                   | feature/m3-evaluate-record | 6    |
+| T033 | W06 | M3       | app      | Feat     | 저장 → 검사 연결, 박사 한두 줄 반응, 같은 ID 재시도                              | feature/m3-evaluate-record | 5    |
+| T034 | W06 | M3       | app      | Decision | STT 서비스 결정 (한국어 정확도, 비용)                                            | -                          | 4    |
 
 ## W07 · M3 음성 기록
 
@@ -135,13 +138,14 @@
 
 ## W11 · M5 미션과 약속
 
-| ID   | 주  | 마일스톤 | 저장소   | 유형     | 할 일                                               | 브랜치              | 시간 |
-| ---- | --- | -------- | -------- | -------- | --------------------------------------------------- | ------------------- | ---- |
-| T049 | W11 | M5       | backend  | Feat     | doctor-chat 결론에서 약속·미션 생성                 | feature/m5-missions | 3    |
-| T050 | W11 | M5       | app      | Feat     | 적응 미션, 홈 미션 카드, 흐름 결론의 약속·미션 생성 | feature/m5-missions | 5    |
-| T051 | W11 | M5       | app      | Feat     | 기록으로 약속 자동 해결 반응 ("먼저 알려줬네!")     | feature/m5-missions | 2    |
-| T052 | W11 | M5       | planning | Content  | 지식 자료 나머지 주제                               | -                   | 4    |
-| T053 | W11 | M5       | app      | Settings | 푸시 인증 설정: APNs 키, FCM, Expo 액세스 토큰      | feature/m5-push     | 4    |
+| ID   | 주  | 마일스톤 | 저장소   | 유형     | 할 일                                                           | 브랜치              | 시간 |
+| ---- | --- | -------- | -------- | -------- | --------------------------------------------------------------- | ------------------- | ---- |
+| T049 | W11 | M5       | backend  | Feat     | doctor-chat 결론에서 약속·미션 생성                             | feature/m5-missions | 3    |
+| T050 | W11 | M5       | app      | Feat     | 적응 미션, 홈 미션 카드, 흐름 결론의 약속·미션 생성             | feature/m5-missions | 5    |
+| T051 | W11 | M5       | app      | Feat     | 기록으로 약속 자동 해결 반응 ("먼저 알려줬네!")                 | feature/m5-missions | 2    |
+| T052 | W11 | M5       | planning | Content  | 지식 자료 나머지 주제                                           | -                   | 4    |
+| T001 | W11 | M5       | planning | Settings | Apple 개발자 계정 승인 확인, Expo 계정 확인 (신청은 W01에 완료) | -                   | 1    |
+| T053 | W11 | M5       | app      | Settings | 푸시 인증 설정: APNs 키, FCM, Expo 액세스 토큰                  | feature/m5-push     | 4    |
 
 ## W12 · M5 서버 푸시
 
@@ -179,13 +183,13 @@
 | 마일스톤             | 주       | 시간    |
 | -------------------- | -------- | ------- |
 | M1 기반              | W01–W02  | 36      |
-| M2 첫 흐름           | W03–W04  | 36      |
+| M2 첫 흐름           | W03–W04  | 41      |
 | M3 기록              | W05–W07  | 54      |
 | M4 박사              | W08–W10  | 54      |
-| M5 약속·미션·알림    | W11–W12  | 36      |
+| M5 약속·미션·알림    | W11–W12  | 37      |
 | M6 병원 권고·사진·홈 | W13      | 18      |
 | M7 알파 배포         | W14      | 18      |
-| **합계**             | **14주** | **252** |
+| **합계**             | **14주** | **258** |
 
 > 여유분을 각 주에 나눠 넣었기 때문에 15의 어림값(약 215시간)보다 크다
 
