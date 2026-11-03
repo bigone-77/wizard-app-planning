@@ -54,6 +54,7 @@
 | T009 | W02 | M1       | app      | Settings | 16장 폴더 뼈대, 하단 탭 4개 빈 화면                                                         | feature/m1-project-setup   | 2    |
 | T072 | W02 | M1       | planning | Decision | Figma 디자인 토큰 정리: 색(primary 결정), 글자 스타일, 간격, 모서리 (T010의 원본)           | -                          | 2    |
 | T010 | W02 | M1       | app      | Decision | 스타일 라이브러리 결정, 디자인 토큰 초안 (간격·글자 크기·색 이름)                           | feature/m1-design-tokens   | 3    |
+| T073 | W02 | M1       | app      | Settings | Prettier(prettier-plugin-tailwindcss), ESLint(eslint-config-expo, 토큰 클래스 검사) 설정    | feature/m1-lint-format     | 2    |
 | T011 | W02 | M1       | app      | Settings | 환경 변수(local·dev), Supabase 클라이언트, TanStack Query, UUIDv7 유틸                      | feature/m1-auth            | 3    |
 | T012 | W02 | M1       | app      | Feat     | 이메일 로그인(개발 빌드 전용), 세션 유지, 이동 규칙 1단계 (S01)                             | feature/m1-auth            | 4    |
 | T013 | W02 | M1       | app      | Settings | db:types 스크립트, DB 타입 생성                                                             | feature/m1-auth            | 1    |
@@ -183,14 +184,14 @@
 
 | 마일스톤             | 주       | 시간    |
 | -------------------- | -------- | ------- |
-| M1 기반              | W01–W02  | 38      |
+| M1 기반              | W01–W02  | 40      |
 | M2 첫 흐름           | W03–W04  | 41      |
 | M3 기록              | W05–W07  | 54      |
 | M4 박사              | W08–W10  | 54      |
 | M5 약속·미션·알림    | W11–W12  | 37      |
 | M6 병원 권고·사진·홈 | W13      | 18      |
 | M7 알파 배포         | W14      | 18      |
-| **합계**             | **14주** | **260** |
+| **합계**             | **14주** | **262** |
 
 > 여유분을 각 주에 나눠 넣었기 때문에 15의 어림값(약 215시간)보다 크다
 
