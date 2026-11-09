@@ -1,6 +1,6 @@
 # 16. 시스템 아키텍처
 
-> 상태: 확정 — V0(알파) 기준. 본 개발은 이 문서를 따른다
+> 상태: 확정 (V0 알파 기준). 본 개발은 이 문서를 따른다
 > 근거 문서: 06 V0 기능, 08 User Flow, 09 화면 목록, 10 DB 구조, 12 박사 설계, 15 개발 계획
 > **이 문서와 다른 문서가 충돌하면**: 데이터 구조는 10, 박사 동작은 12, 기능 범위는 06이 우선한다
 > **저장소는 두 개**(`wizard-app`, `wizard-backend`). 두 저장소가 주고받는 데이터 형식은 **16장 형식 약속**이 기준이다
@@ -88,19 +88,20 @@ flowchart TB
 
 ### 앱
 
-| 영역       | 선택                                            | 비고                                                        |
-| ---------- | ----------------------------------------------- | ----------------------------------------------------------- |
-| 프레임워크 | Expo (React Native), TypeScript                 | **개발 빌드** 사용 (Expo Go는 푸시 불가)                    |
-| 라우팅     | Expo Router                                     | 파일 기반                                                   |
-| 서버 상태  | TanStack Query                                  | 캐시, 낙관적 업데이트, 재시도                               |
-| Supabase   | `@supabase/supabase-js`                         | 세션은 기기 보안 저장소에                                   |
-| 검증       | zod                                             | jsonb 컬럼(`care_records.data`, `ai_messages.payload`) 타입 |
-| ID         | UUIDv7 라이브러리                               | 클라이언트 생성                                             |
-| 알림       | `expo-notifications`                            | 권한, Expo 푸시 토큰                                        |
-| 녹음       | Expo 오디오 모듈                                | 음성 기록                                                   |
-| 사진       | Expo 카메라·이미지 선택 + 이미지 리사이즈       | 업로드 전 압축 (가로 약 1280px, 화질 약 70%)                |
-| PDF        | `expo-print`, `expo-sharing`                    | 진료 요약                                                   |
-| 스타일     | **미정** (M1에서 결정: NativeWind / Tamagui 등) | 디자인 토큰 기반                                            |
+| 영역       | 선택                                          | 비고                                                               |
+| ---------- | --------------------------------------------- | ------------------------------------------------------------------ |
+| 프레임워크 | Expo (React Native), TypeScript               | **개발 빌드** 사용 (Expo Go는 푸시 불가)                           |
+| 라우팅     | Expo Router                                   | 파일 기반                                                          |
+| 서버 상태  | TanStack Query                                | 캐시, 낙관적 업데이트, 재시도                                      |
+| Supabase   | `@supabase/supabase-js`                       | 세션은 기기 보안 저장소에                                          |
+| 검증       | zod                                           | jsonb 컬럼(`care_records.data`, `ai_messages.payload`) 타입        |
+| ID         | UUIDv7 라이브러리                             | 클라이언트 생성                                                    |
+| 알림       | `expo-notifications`                          | 권한, Expo 푸시 토큰                                               |
+| 녹음       | Expo 오디오 모듈                              | 음성 기록                                                          |
+| 사진       | Expo 카메라·이미지 선택 + 이미지 리사이즈     | 업로드 전 압축 (가로 약 1280px, 화질 약 70%)                       |
+| PDF        | `expo-print`, `expo-sharing`                  | 진료 요약                                                          |
+| 스타일     | NativeWind v4 (Tailwind 3)                    | Figma 토큰 JSON에서 테마 생성 (`pnpm tokens`). 다크 모드는 V0 이후 |
+| 코드 품질  | Prettier, ESLint (토큰 밖 클래스 금지), husky | 커밋 전 자동 검사                                                  |
 
 ### 서버 (Supabase)
 
@@ -116,11 +117,11 @@ flowchart TB
 
 ### 외부
 
-| 영역 | 선택                                       |
-| ---- | ------------------------------------------ |
-| LLM  | **미정** — 13 정답지 평가 점수로 선택 (M4) |
-| STT  | **미정** — 한국어 정확도로 선택 (M3)       |
-| 푸시 | Expo Push Service (APNs·FCM 중계)          |
+| 영역 | 선택                                      |
+| ---- | ----------------------------------------- |
+| LLM  | **미정**: 13 정답지 평가 점수로 선택 (M4) |
+| STT  | **미정**: 한국어 정확도로 선택 (M3)       |
+| 푸시 | Expo Push Service (APNs·FCM 중계)         |
 
 ---
 
@@ -140,7 +141,7 @@ flowchart TB
 ### `wizard-app` 폴더
 
 ```text
-app/                          # Expo Router 화면
+src/app/                      # Expo Router 화면 (앱 코드는 모두 src/ 아래)
   _layout.tsx                 # 인증·온보딩 가드 (4.3 이동 규칙)
   (auth)/
     login.tsx                 # S01
@@ -161,14 +162,17 @@ app/                          # Expo Router 화면
   settings/index.tsx          # S13 설정
 
 src/
+  theme/                      # 디자인 토큰 → 테마 (build-tokens.ts, tokens.generated.json 자동 생성)
+  scripts/                    # 개발용 스크립트 (환경 전환 use-env, DB 타입 db-types)
   lib/
+    env.ts                    # 환경 변수 검사 (비밀 키 거부)
     supabase.ts               # 클라이언트 (env로 local/dev/alpha 전환)
     query-client.ts
     ids.ts                    # uuidv7()
     time.ts                   # 시간대, 상대 시간 ("2일 전")
     errors.ts                 # DB 에러 → 사용자 메시지 (11장)
   features/
-    auth/                     # 로그인, 세션, 이메일 로그인 분기
+    auth/                     # 로그인, 세션, 이메일 로그인 분기, 로그인 실패 문구
     onboarding/               # 경험 수준, 이동 규칙
     pets/                     # 개체 조회·등록·수정·보관
     records/                  # 기록 CRUD, 확인 카드, 음성 기록
@@ -180,7 +184,9 @@ src/
     home/                     # 홈 상태 계산 (적응기 / 평소 / 입양 준비)
   contracts/                  # 16장 형식 약속의 zod 스키마 (앱 쪽 사본)
   types/database.ts           # DB 타입 (자동 생성)
-content/
+design/
+  wizard-tokens.json          # Figma(Tokens Studio) 토큰 원본. 색·글자·간격의 유일한 기준
+content/                      # 루트에 둔다 (코드가 아니라 콘텐츠)
   flows/                      # 사전 설계 흐름 JSON (흐름 ID는 16장)
     emergency-check.json
     feeding-refusal.json
@@ -231,7 +237,7 @@ supabase/
 | S12 | 가이드         | `/(tabs)/guide`                                   |
 | S13 | 설정           | `/settings`                                       |
 
-### 4.3 앱 실행 이동 규칙 (`app/_layout.tsx`)
+### 4.3 앱 실행 이동 규칙 (`src/app/_layout.tsx`)
 
 ```ts
 if (!session)                         → /(auth)/login
@@ -318,7 +324,7 @@ const result = await callFunction("evaluate-record", { record_ids: [id] }); // �
 - DB 접근: 사용자 권한 작업은 사용자 JWT로, 서버 전용 작업(예산 차감, 발송 선점, Admin)은 service_role로
 - 공통 에러 형식: `{ "error": { "code": "BUDGET_EXCEEDED" | "NOT_FOUND" | "INVALID_INPUT" | "UPSTREAM_ERROR", "message": "..." } }`
 
-### 7.1 `doctor-chat` — 박사 대화
+### 7.1 `doctor-chat`: 박사 대화
 
 | 항목 | 내용                                                                                         |
 | ---- | -------------------------------------------------------------------------------------------- |
@@ -338,7 +344,7 @@ const result = await callFunction("evaluate-record", { record_ids: [id] }); // �
 8. 결론에 약속·미션이 있으면 `follow_ups`·`missions`·`mission_items` 생성
 9. 병원 권고면 `{ type: "hospital" }` 메시지 + 진료 요약 데이터
 
-### 7.2 `evaluate-record` — 기록 시점 검사
+### 7.2 `evaluate-record`: 기록 시점 검사
 
 | 항목 | 내용                                                                                                                                                |
 | ---- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -349,12 +355,12 @@ const result = await callFunction("evaluate-record", { record_ids: [id] }); // �
 **처리 순서**
 
 1. 기록과 개체의 최근 기록 조회 (종류별 인덱스 사용)
-2. 규칙 판정 (04 V0 규칙 목록) — **LLM 없음, 예산 무관**
+2. 규칙 판정 (04 V0 규칙 목록). **LLM 없음, 예산 무관**
 3. 트리거가 처리한 약속 해결·미션 체크 결과 조회 → "먼저 알려줬네!" 반응에 사용
 4. 박사 반응 문구 생성 (템플릿, 1단계는 한두 줄)
 5. 2단계: `[지금 확인하기] [나중에]` 제안 / 3단계: 병원 권고로 연결
 
-### 7.3 `voice-record` — 음성 기록
+### 7.3 `voice-record`: 음성 기록
 
 | 항목 | 내용                                                                    |
 | ---- | ----------------------------------------------------------------------- |
@@ -370,7 +376,7 @@ const result = await callFunction("evaluate-record", { record_ids: [id] }); // �
 4. zod·DB 검증 규칙으로 초안 확인
 5. **저장하지 않고 초안만 반환** → 앱의 확인 카드 → 사용자가 저장 (REST, `source = stt`, `raw_text` 포함)
 
-### 7.4 `send-notifications` — 푸시 발송
+### 7.4 `send-notifications`: 푸시 발송
 
 | 항목 | 내용                                                                                                                                                                  |
 | ---- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -378,14 +384,14 @@ const result = await callFunction("evaluate-record", { record_ids: [id] }); // �
 | 처리 | `claim_due_follow_ups()`로 약속 선점 → 미션 항목 알림 선점(`mission_items.notified_at`) → 사용자의 모든 `device_tokens`로 Expo Push 발송 → 실패 토큰(앱 삭제 등) 삭제 |
 | 보장 | 발송 직전 상태 확인 → 해결된 약속·보관된 개체에는 발송되지 않음. 선점으로 중복 발송 없음                                                                              |
 
-### 7.5 `daily-cleanup` — 정리
+### 7.5 `daily-cleanup`: 정리
 
 | 항목 | 내용                                                                                           |
 | ---- | ---------------------------------------------------------------------------------------------- |
 | 호출 | `pg_cron` 하루 1회                                                                             |
 | 처리 | 만료된 임시 사진(`photos.expires_at`), 행이 없는 고아 파일 → **Storage API로 삭제** 후 행 삭제 |
 
-### 7.6 `delete-account` — 계정 삭제
+### 7.6 `delete-account`: 계정 삭제
 
 | 항목 | 내용                                                                                             |
 | ---- | ------------------------------------------------------------------------------------------------ |
@@ -507,20 +513,32 @@ const result = await callFunction("evaluate-record", { record_ids: [id] }); // �
 | `UPSTREAM_ERROR` (LLM·STT)                  | 재시도 버튼. 음성은 텍스트 입력으로 대체 제안                                                      |
 | 네트워크 끊김                               | 같은 ID로 재시도, 화면은 낙관적 상태 유지                                                          |
 
+**로그인 (S01)**: 문구는 `src/features/auth/auth-errors.ts`
+
+| Supabase Auth 에러      | 앱 메시지                                                                                       |
+| ----------------------- | ----------------------------------------------------------------------------------------------- |
+| `invalid_credentials`   | "이메일 또는 비밀번호가 맞지 않아요" (가입 안 된 이메일도 같은 문구. 가입 여부를 알려주지 않음) |
+| `user_already_exists`   | "이미 가입된 이메일이에요. 로그인해 주세요"                                                     |
+| `weak_password`         | "비밀번호는 6자 이상이어야 해요"                                                                |
+| `email_address_invalid` | "이메일 형식을 확인해 주세요"                                                                   |
+| 네트워크 오류           | "인터넷 연결을 확인하고 다시 시도해 주세요"                                                     |
+| 그 밖의 에러            | "로그인하지 못했어요. 잠시 후 다시 시도해 주세요"                                               |
+
 ---
 
 ## 12. 환경과 설정
 
 ### 환경
 
-| 환경  | Supabase                      | 앱 빌드                           | 용도                         |
-| ----- | ----------------------------- | --------------------------------- | ---------------------------- |
-| local | Docker (`npx supabase start`) | 개발 빌드 + 시뮬레이터·에뮬레이터 | 대부분의 개발, 이메일 로그인 |
-| dev   | 클라우드 개발용 프로젝트      | 개발 빌드                         | 소셜 로그인, 푸시            |
-| alpha | 클라우드 프로젝트 (서울)      | TestFlight · Play 내부 테스트     | 테스터                       |
+| 환경  | Supabase                                    | 앱 빌드                       | 용도                         |
+| ----- | ------------------------------------------- | ----------------------------- | ---------------------------- |
+| local | Docker (`pnpm db:start`, 필요한 컨테이너만) | 개발 빌드 + iOS 시뮬레이터    | 대부분의 개발, 이메일 로그인 |
+| dev   | 클라우드 개발용 프로젝트                    | 개발 빌드                     | 소셜 로그인, 푸시            |
+| alpha | 클라우드 프로젝트 (서울)                    | TestFlight · Play 내부 테스트 | 테스터                       |
 
 - 세 환경은 같은 마이그레이션으로 맞춘다 (`db reset` → local, `db push` → dev·alpha)
-- 테스트 기기: iOS 시뮬레이터(Xcode 14+, Apple Silicon Mac), Google Play 포함 안드로이드 에뮬레이터
+- 테스트 기기: 평소에는 iOS 시뮬레이터. Google Play 포함 안드로이드 에뮬레이터는 M7 끝 점검(T080)에서
+- 환경 전환: `pnpm env:local`, `pnpm env:dev` (`.env.local` 생성)
 
 ### 앱 환경 변수
 
@@ -530,6 +548,9 @@ const result = await callFunction("evaluate-record", { record_ids: [id] }); // �
 | `EXPO_PUBLIC_SUPABASE_ANON_KEY`  | 환경별                             |
 | `EXPO_PUBLIC_ENABLE_EMAIL_LOGIN` | local·dev: `true` / alpha: `false` |
 | `EXPO_PUBLIC_APP_ENV`            | `local` / `dev` / `alpha`          |
+
+- 안드로이드 에뮬레이터에서 `127.0.0.1`은 에뮬레이터 자신이다. local Supabase는 `http://10.0.2.2:54321` 또는 `adb reverse tcp:54321 tcp:54321`
+- 키는 anon(publishable)만. service_role·secret 키는 `src/lib/env.ts` 검사에서 거부된다
 
 ### 서버 함수 secrets
 
@@ -555,7 +576,7 @@ const result = await callFunction("evaluate-record", { record_ids: [id] }); // �
 | -------- | ------------------------------------------------------------------------ | -------------------------------------------- | ---- |
 | 단위     | 흐름 실행기, 상황 블록 생성, 출력 검증, 규칙 판정, 시간 계산, zod 스키마 | Vitest (순수 TS 로직)                        | 목업 |
 | 컴포넌트 | 메시지 렌더링, 하단 칩, 확인 카드                                        | Jest + React Native Testing Library          | 목업 |
-| DB       | RLS, 트리거, 제약 (10 예외 상황)                                         | SQL 테스트 (`wizard-backend`, 로컬 Supabase) | —    |
+| DB       | RLS, 트리거, 제약 (10 예외 상황)                                         | SQL 테스트 (`wizard-backend`, 로컬 Supabase) | 없음 |
 | 평가     | 박사 답변 (13 정답지)                                                    | Vitest + 실제 호출                           | 실제 |
 | E2E      | 로그인 → 등록 → 기록 → 박사 → 병원 권고                                  | Maestro                                      | 목업 |
 
@@ -579,13 +600,14 @@ const result = await callFunction("evaluate-record", { record_ids: [id] }); // �
 
 ## 15. 미정 사항 (해당 마일스톤에서 결정)
 
-| 항목                  | 결정 시점 | 기준                                 |
-| --------------------- | --------- | ------------------------------------ |
-| 스타일 라이브러리     | M1        | 디자인 토큰 지원, 다크 모드          |
-| STT 서비스            | M3        | 한국어 정확도, 비용                  |
-| LLM 서비스·모델       | M4        | 13 정답지 평가 점수, 비용, 응답 속도 |
-| `ai_daily_budget` 값  | M7        | 알파 비용 측정                       |
-| 기록 시점 검사 기준값 | M3        | 14 지식 자료                         |
+| 항목                  | 결정 시점 | 기준                                                 |
+| --------------------- | --------- | ---------------------------------------------------- |
+| 스타일 라이브러리     | M1        | **결정: NativeWind v4** (T010). 다크 모드는 V0 이후  |
+| 평소 개발 Supabase    | M1        | **결정: 로컬 Docker** (T011). 소셜 로그인·푸시만 dev |
+| STT 서비스            | M3        | 한국어 정확도, 비용                                  |
+| LLM 서비스·모델       | M4        | 13 정답지 평가 점수, 비용, 응답 속도                 |
+| `ai_daily_budget` 값  | M7        | 알파 비용 측정                                       |
+| 기록 시점 검사 기준값 | M3        | 14 지식 자료                                         |
 
 ---
 
