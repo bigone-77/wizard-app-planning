@@ -47,29 +47,33 @@
 
 ## W02 · M1 앱 기반
 
-| ID   | 주  | 마일스톤 | 저장소   | 유형     | 할 일                                                                                       | 브랜치                     | 시간 |
-| ---- | --- | -------- | -------- | -------- | ------------------------------------------------------------------------------------------- | -------------------------- | ---- |
-| T002 | W02 | M1       | planning | Settings | 개발 환경 설치: Docker Desktop, Xcode·iOS 시뮬레이터, Android Studio·Google Play 에뮬레이터 | -                          | 2    |
-| T008 | W02 | M1       | app      | Settings | Expo 프로젝트 생성, 개발 빌드로 iOS·안드로이드 실행                                         | feature/m1-project-setup   | 4    |
-| T009 | W02 | M1       | app      | Settings | 16장 폴더 뼈대, 하단 탭 4개 빈 화면                                                         | feature/m1-project-setup   | 2    |
-| T072 | W02 | M1       | planning | Decision | Figma 디자인 토큰 정리: 색(primary 결정), 글자 스타일, 간격, 모서리 (T010의 원본)           | -                          | 2    |
-| T010 | W02 | M1       | app      | Decision | 스타일 라이브러리 결정, 디자인 토큰 초안 (간격·글자 크기·색 이름)                           | feature/m1-design-tokens   | 3    |
-| T073 | W02 | M1       | app      | Settings | Prettier(prettier-plugin-tailwindcss), ESLint(eslint-config-expo, 토큰 클래스 검사) 설정    | feature/m1-lint-format     | 2    |
-| T011 | W02 | M1       | app      | Settings | 환경 변수(local·dev), Supabase 클라이언트, TanStack Query, UUIDv7 유틸                      | feature/m1-auth            | 3    |
-| T012 | W02 | M1       | app      | Feat     | 이메일 로그인(개발 빌드 전용), 세션 유지, 이동 규칙 1단계 (S01)                             | feature/m1-auth            | 4    |
-| T013 | W02 | M1       | app      | Settings | db:types 스크립트, DB 타입 생성                                                             | feature/m1-auth            | 1    |
-| T014 | W02 | M1       | planning | Content  | 즉시 병원 신호 목록 검토·보완                                                               | -                          | 1    |
-| T071 | W02 | M1       | backend  | Settings | CLAUDE.md에 문체·PR 형식 추가, .claude/ 줄표 제거, deny 규칙                                | feature/m1-claude-settings | 1    |
+| ID   | 주  | 마일스톤 | 저장소   | 유형     | 할 일                                                                                       | 브랜치                      | 시간 |
+| ---- | --- | -------- | -------- | -------- | ------------------------------------------------------------------------------------------- | --------------------------- | ---- |
+| T002 | W02 | M1       | planning | Settings | 개발 환경 설치: Docker Desktop, Xcode·iOS 시뮬레이터, Android Studio·Google Play 에뮬레이터 | -                           | 2    |
+| T008 | W02 | M1       | app      | Settings | Expo 프로젝트 생성, 개발 빌드로 iOS 실행 (안드로이드는 T080 끝 점검)                        | feature/m1-project-setup    | 4    |
+| T009 | W02 | M1       | app      | Settings | src/ 폴더 뼈대 (16 4장), 하단 탭 4개 빈 화면                                                | feature/m1-project-setup    | 2    |
+| T072 | W02 | M1       | planning | Decision | Figma 디자인 토큰 정리: 색(primary 결정), 글자 스타일, 간격, 모서리 (T010의 원본)           | -                           | 2    |
+| T010 | W02 | M1       | app      | Decision | 스타일 라이브러리 결정(NativeWind v4), Figma 토큰을 코드로 연결                             | feature/m1-design-tokens    | 3    |
+| T073 | W02 | M1       | app      | Settings | Prettier(prettier-plugin-tailwindcss), ESLint(eslint-config-expo, 토큰 클래스 검사) 설정    | feature/m1-lint-format      | 2    |
+| T011 | W02 | M1       | app      | Settings | 환경 변수(local·dev), Supabase 클라이언트, TanStack Query, UUIDv7 유틸                      | feature/m1-auth             | 3    |
+| T012 | W02 | M1       | app      | Feat     | 이메일 로그인(개발 빌드 전용), 세션 유지, 이동 규칙 1단계 (S01)                             | feature/m1-auth             | 4    |
+| T013 | W02 | M1       | app      | Settings | db:types 스크립트, DB 타입 생성                                                             | feature/m1-auth             | 1    |
+| T014 | W02 | M1       | planning | Content  | 즉시 병원 신호 목록 검토·보완                                                               | -                           | 1    |
+| T071 | W02 | M1       | backend  | Settings | CLAUDE.md에 문체·PR 형식 추가, .claude/ 줄표 제거, deny 규칙                                | feature/m1-claude-settings  | 1    |
+| T074 | W02 | M1       | app      | Settings | start-task를 계획 모드 승인으로 바꿈 (감시자 판단 항상 표시)                                | feature/m1-claude-plan-mode | 1    |
 
 ## W03 · M2 첫 흐름 (1)
 
-| ID   | 주  | 마일스톤 | 저장소   | 유형    | 할 일                                                         | 브랜치                  | 시간 |
-| ---- | --- | -------- | -------- | ------- | ------------------------------------------------------------- | ----------------------- | ---- |
-| T015 | W03 | M2       | app      | Feat    | 박사 인사(S02), 3갈래 선택, 경험 수준 저장                    | feature/m2-greeting     | 4    |
-| T016 | W03 | M2       | app      | Feat    | 입양 전 가이드(S03), 입양 준비 상태 홈                        | feature/m2-pre-adoption | 4    |
-| T017 | W03 | M2       | planning | Content | 입양 전 가이드 콘텐츠: 준비물 체크리스트, 분양 시 질문 리스트 | -                       | 3    |
-| T018 | W03 | M2       | app      | Feat    | 개체 등록(S04) 폼과 검증, 숙련자 선택 항목 펼침               | feature/m2-pet-register | 5    |
-| T019 | W03 | M2       | app      | Docs    | 사전 설계 흐름 JSON 형식 정의와 zod 스키마 (16장 16.5)        | feature/m2-flow-schema  | 2    |
+| ID   | 주  | 마일스톤 | 저장소   | 유형     | 할 일                                                                                      | 브랜치                       | 시간 |
+| ---- | --- | -------- | -------- | -------- | ------------------------------------------------------------------------------------------ | ---------------------------- | ---- |
+| T015 | W03 | M2       | app      | Feat     | 박사 인사(S02), 3갈래 선택, 경험 수준 저장                                                 | feature/m2-greeting          | 4    |
+| T016 | W03 | M2       | app      | Feat     | 입양 전 가이드(S03), 입양 준비 상태 홈                                                     | feature/m2-pre-adoption      | 4    |
+| T017 | W03 | M2       | planning | Content  | 입양 전 가이드 콘텐츠: 준비물 체크리스트, 분양 시 질문 리스트                              | -                            | 3    |
+| T018 | W03 | M2       | app      | Feat     | 개체 등록(S04) 폼과 검증, 숙련자 선택 항목 펼침                                            | feature/m2-pet-register      | 5    |
+| T019 | W03 | M2       | app      | Docs     | 사전 설계 흐름 JSON 형식 정의와 zod 스키마 (16장 16.5)                                     | feature/m2-flow-schema       | 2    |
+| T075 | W03 | M2       | planning | Decision | Figma 화면 뼈대: S02 박사 인사, S03 입양 전 가이드, S04 개체 등록, S06 기본 홈 (T015 전에) | -                            | 3    |
+| T076 | W03 | M2       | backend  | Settings | 루트 .gitignore 추가 (.DS_Store, .env 등)                                                  | feature/m2-backend-gitignore | 1    |
+| T077 | W03 | M2       | app      | Docs     | CLAUDE.md 정리: 정해진 미정 항목(스타일, 로컬·dev) 반영, 시작 모드는 VS Code 사용자 설정   | feature/m2-app-claude-md     | 1    |
 
 ## W04 · M2 첫 흐름 (2) + 속도 점검
 
@@ -84,6 +88,7 @@
 | T069 | W04 | M2       | backend  | Feat     | 개체 상한 트리거: 본인 개체가 아니면 검사하지 않고 RLS에 맡김 (남의 개체 유무 노출 방지)                           | feature/m2-pet-limit-fix | 1    |
 | T070 | W04 | M2       | backend  | Settings | 테이블 권한(grant)을 마이그레이션에 명시 (Automatically expose new tables 설정 의존 제거)                          | feature/m2-table-grants  | 2    |
 | T025 | W04 | M2       | app      | Feat     | 소셜 로그인(애플·구글), dev 프로젝트에서 테스트                                                                    | feature/m2-social-login  | 3    |
+| T078 | W04 | M2       | app      | Settings | CI: PR마다 타입 검사, lint, 서식, Jest·Vitest 실행 (GitHub Actions)                                                | feature/m2-ci            | 2    |
 | T026 | W04 | M2       | planning | Docs     | 속도 점검: M1~M2 실제 시간 기록, 이후 주차 조정                                                                    | -                        | 1    |
 
 ## W05 · M3 텍스트 기록
@@ -103,6 +108,7 @@
 | T032 | W06 | M3       | backend  | Feat     | evaluate-record V0 규칙 완성(04)과 단위 테스트                                   | feature/m3-evaluate-record | 6    |
 | T033 | W06 | M3       | app      | Feat     | 저장 → 검사 연결, 박사 한두 줄 반응, 같은 ID 재시도                              | feature/m3-evaluate-record | 5    |
 | T034 | W06 | M3       | app      | Decision | STT 서비스 결정 (한국어 정확도, 비용)                                            | -                          | 4    |
+| T079 | W06 | M3       | app      | Test     | Maestro 설정, 로그인·개체 등록·텍스트 기록 E2E                                   | feature/m3-maestro         | 3    |
 
 ## W07 · M3 음성 기록
 
@@ -159,24 +165,26 @@
 
 ## W13 · M6 병원 권고·사진·홈
 
-| ID   | 주  | 마일스톤 | 저장소  | 유형 | 할 일                                                        | 브랜치                    | 시간 |
-| ---- | --- | -------- | ------- | ---- | ------------------------------------------------------------ | ------------------------- | ---- |
-| T057 | W13 | M6       | app     | Feat | 진료 요약 PDF 내보내기·공유                                  | feature/m6-vet-pdf        | 4    |
-| T058 | W13 | M6       | app     | Feat | 기준 사진(S05): 실루엣 가이드, 압축, 업로드                  | feature/m6-baseline-photo | 5    |
-| T059 | W13 | M6       | app     | Feat | 홈 완성: 박사 한마디·추천 질문 칩, 개체 요약 숫자, 다음 체크 | feature/m6-home           | 5    |
-| T060 | W13 | M6       | backend | Feat | delete-account 함수                                          | feature/m6-account-delete | 2    |
-| T061 | W13 | M6       | app     | Feat | 설정(S13): 경험 수준, 알림 시간, 계정 삭제                   | feature/m6-account-delete | 2    |
+| ID   | 주  | 마일스톤 | 저장소   | 유형    | 할 일                                                               | 브랜치                    | 시간 |
+| ---- | --- | -------- | -------- | ------- | ------------------------------------------------------------------- | ------------------------- | ---- |
+| T057 | W13 | M6       | app      | Feat    | 진료 요약 PDF 내보내기·공유                                         | feature/m6-vet-pdf        | 4    |
+| T058 | W13 | M6       | app      | Feat    | 기준 사진(S05): 실루엣 가이드, 압축, 업로드                         | feature/m6-baseline-photo | 5    |
+| T059 | W13 | M6       | app      | Feat    | 홈 완성: 박사 한마디·추천 질문 칩, 개체 요약 숫자, 다음 체크        | feature/m6-home           | 5    |
+| T060 | W13 | M6       | backend  | Feat    | delete-account 함수                                                 | feature/m6-account-delete | 2    |
+| T061 | W13 | M6       | app      | Feat    | 설정(S13): 경험 수준, 알림 시간, 계정 삭제                          | feature/m6-account-delete | 2    |
+| T081 | W13 | M6       | planning | Content | 즉시 병원 신호(18) 알파 전 최종 검토: 전문가 확인, 흐름 내용과 일치 | -                         | 2    |
 
 ## W14 · M7 알파 배포
 
-| ID   | 주  | 마일스톤 | 저장소  | 유형     | 할 일                                                      | 브랜치              | 시간 |
-| ---- | --- | -------- | ------- | -------- | ---------------------------------------------------------- | ------------------- | ---- |
-| T062 | W14 | M7       | backend | Feat     | daily-cleanup 함수                                         | feature/m7-cleanup  | 3    |
-| T063 | W14 | M7       | app     | Feat     | 박사 답변 👍 / 👎                                          | feature/m7-feedback | 2    |
-| T064 | W14 | M7       | backend | Settings | 운영 프로젝트 생성, 운영 secrets, 알파 박사 예산 설정      | -                   | 2    |
-| T065 | W14 | M7       | app     | Settings | EAS 프로필(development·preview·production), 버전·빌드 번호 | feature/m7-eas      | 2    |
-| T066 | W14 | M7       | app     | Test     | 버그 수정, 평가 재실행, 처음 설치부터 첫 기록까지 점검     | -                   | 5    |
-| T067 | W14 | M7       | app     | Deploy   | release/v0.1.0 → main, TestFlight·Play 내부 테스트 배포    | -                   | 4    |
+| ID   | 주  | 마일스톤 | 저장소  | 유형     | 할 일                                                                                                | 브랜치                   | 시간 |
+| ---- | --- | -------- | ------- | -------- | ---------------------------------------------------------------------------------------------------- | ------------------------ | ---- |
+| T062 | W14 | M7       | backend | Feat     | daily-cleanup 함수                                                                                   | feature/m7-cleanup       | 3    |
+| T063 | W14 | M7       | app     | Feat     | 박사 답변 👍 / 👎                                                                                    | feature/m7-feedback      | 2    |
+| T064 | W14 | M7       | backend | Settings | 운영 프로젝트 생성, 운영 secrets, 알파 박사 예산 설정                                                | -                        | 2    |
+| T065 | W14 | M7       | app     | Settings | EAS 프로필(development·preview·production), 버전·빌드 번호                                           | feature/m7-eas           | 2    |
+| T066 | W14 | M7       | app     | Test     | 버그 수정, 평가 재실행, 처음 설치부터 첫 기록까지 점검                                               | -                        | 5    |
+| T080 | W14 | M7       | app     | Test     | 안드로이드 끝 점검: CLAUDE.md 목록(푸시, 녹음, 지도, PDF, 뒤로 가기, 글꼴, 그림자, 키보드, 10.0.2.2) | feature/m7-android-check | 4    |
+| T067 | W14 | M7       | app     | Deploy   | release/v0.1.0 → main, TestFlight·Play 내부 테스트 배포                                              | -                        | 4    |
 
 ---
 
@@ -184,14 +192,14 @@
 
 | 마일스톤             | 주       | 시간    |
 | -------------------- | -------- | ------- |
-| M1 기반              | W01–W02  | 40      |
-| M2 첫 흐름           | W03–W04  | 41      |
-| M3 기록              | W05–W07  | 54      |
-| M4 박사              | W08–W10  | 54      |
-| M5 약속·미션·알림    | W11–W12  | 37      |
-| M6 병원 권고·사진·홈 | W13      | 18      |
-| M7 알파 배포         | W14      | 18      |
-| **합계**             | **14주** | **262** |
+| M1 기반              | W01, W02 | 41      |
+| M2 첫 흐름           | W03, W04 | 48      |
+| M3 기록              | W05~W07  | 57      |
+| M4 박사              | W08~W10  | 54      |
+| M5 약속·미션·알림    | W11, W12 | 37      |
+| M6 병원 권고·사진·홈 | W13      | 20      |
+| M7 알파 배포         | W14      | 22      |
+| **합계**             | **14주** | **279** |
 
 > 여유분을 각 주에 나눠 넣었기 때문에 15의 어림값(약 215시간)보다 크다
 
